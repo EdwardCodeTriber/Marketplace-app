@@ -1,4 +1,5 @@
-import { useState } from 'react';
+import { useState,  } from 'react';
+import {useNavigate} from "react-router-dom"
 import AppBar from '@mui/material/AppBar';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
@@ -14,9 +15,11 @@ import ListItemButton from '@mui/material/ListItemButton';
 import ListItemText from '@mui/material/ListItemText';
 import Divider from '@mui/material/Divider';
 import Product from './Product';
+import Footer from './Footer';
 
 function Marketplace() {
   const [drawerOpen, setDrawerOpen] = useState(false);
+  const navigate = useNavigate();
 
   const toggleDrawer = (open) => (event) => {
     if (event.type === 'keydown' && (event.key === 'Tab' || event.key === 'Shift')) {
@@ -24,6 +27,10 @@ function Marketplace() {
     }
     setDrawerOpen(open);
   };
+
+  const cart = ()=>{
+    navigate("/Cart")
+  }
 
   const drawerContent = (
     <Box
@@ -71,7 +78,7 @@ function Marketplace() {
           <IconButton edge="end" color="inherit" aria-label="search">
             <SearchIcon />
           </IconButton>
-          <IconButton edge="end" color="inherit" aria-label="cart">
+          <IconButton edge="end" color="inherit" aria-label="cart" onClick={cart}>
             <ShoppingCartIcon />
           </IconButton>
         </Toolbar>
@@ -86,9 +93,7 @@ function Marketplace() {
       <Product />
 
       {/* Footer */}
-      <Box component="footer" sx={{ bgcolor: 'grey.900', py: 2, textAlign: 'center', color: 'grey.400' }}>
-        Footer
-      </Box>
+      <Footer />
     </Box>
   );
 }

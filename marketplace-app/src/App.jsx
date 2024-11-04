@@ -1,12 +1,17 @@
-import Dashboard from "./components/Dashboard"
+import React from 'react';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import Dashboard from './components/Dashboard';
+import Cart from './components/Cart';
 
 function App() {
-
   return (
-    <>
-      <Dashboard/>
-    </>
-  )
+    <Router>
+      <Routes>
+        <Route path="/" element={<Dashboard/>} />
+        <Route path="/Cart" element={<Cart />} />
+      </Routes>
+    </Router>
+  );
 }
 
-export default App
+export default App;
