@@ -22,6 +22,7 @@ export const getProducts = createAsyncThunk(
   async ({ page = 1, limit = 5 }, { rejectWithValue }) => {
     try {
       const response = await axios.get(`${API_URL}?page=${page}&limit=${limit}`);
+      console.log(response.data)
       return response.data;
     } catch (error) {
       return rejectWithValue(error.response.data);

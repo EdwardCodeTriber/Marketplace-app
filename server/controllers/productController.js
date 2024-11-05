@@ -123,4 +123,5 @@ export default {
   deleteProduct,
   updateProduct,
   getProductsByCategory,
+
 };

@@ -18,6 +18,7 @@ import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchProductsByCategory } from "../Redux/productSlice";
 
+// eslint-disable-next-line react/prop-types
 const Category = ({ category }) => {
   const dispatch = useDispatch();
   const { products, loading, error } = useSelector((state) => state.products);
