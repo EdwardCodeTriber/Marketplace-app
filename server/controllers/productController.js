@@ -13,8 +13,17 @@ const createProduct = async (req, res) => {
   }
 };
 
-// Create product function
-
+// Get category function
+const getProductsByCategory = async (req, res) => {
+  try {
+    const category = req.params.category; // Get category from request parameters
+    const products = await Product.find({ category });
+    
+    res.status(200).json(products);
+  } catch (error) {
+    res.status(500).json({ error: "Error retrieving products by category" });
+  }
+};
 
 
 
@@ -113,4 +122,5 @@ export default {
   getProduct,
   deleteProduct,
   updateProduct,
+  getProductsByCategory,
 };

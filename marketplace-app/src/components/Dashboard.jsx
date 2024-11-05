@@ -31,6 +31,9 @@ function Marketplace() {
   const cart = ()=>{
     navigate("/Cart")
   }
+  const category = ()=>{
+    navigate("/Category")
+  }
 
   const drawerContent = (
     <Box
@@ -45,7 +48,7 @@ function Marketplace() {
       <Divider sx={{ bgcolor: 'grey.700' }} />
       <List>
         <ListItem disablePadding>
-          <ListItemButton>
+          <ListItemButton onClick={category}>
             <ListItemText primary="Categories" />
           </ListItemButton>
         </ListItem>
@@ -64,7 +67,7 @@ function Marketplace() {
   );
 
   return (
-    <Box sx={{ bgcolor: 'grey.900', color: 'grey.100', minHeight: '100vh' }}>
+    <Box sx={{ bgcolor: 'grey.900', color: 'grey.100', minHeight: '100vh', }}>
       {/* Navbar */}
       <AppBar position="static" sx={{ bgcolor: 'grey.900' }}>
         <Toolbar>

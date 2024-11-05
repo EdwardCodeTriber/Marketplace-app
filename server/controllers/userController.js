@@ -51,6 +51,12 @@ const loginUser = async (req, res) => {
       email: user.email,
       token,
     });
+
+      // Set token in an HTTP-only cookie
+      res.cookie("token", token, {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === "production", // Only cookies
+      });
   } catch (error) {
     console.log(error);
     res.status(500).json({ error: "Internal server error" });
