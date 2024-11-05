@@ -1,4 +1,4 @@
-import  { useState } from "react";
+import { useState, useEffect } from "react";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import Grid from "@mui/material/Grid";
@@ -10,10 +10,21 @@ import DialogTitle from "@mui/material/DialogTitle";
 import DialogContent from "@mui/material/DialogContent";
 import DialogActions from "@mui/material/DialogActions";
 import Button from "@mui/material/Button";
+import { useDispatch, useSelector } from "react-redux";
+import { getProducts } from "../Redux/productSlice";
 
 const Product = () => {
   const [open, setOpen] = useState(false);
   const [selectedProduct, setSelectedProduct] = useState(null);
+  const dispatch = useDispatch();
+  const { products, loading, error } = useSelector((state) => state.products);
+
+  useEffect(() => {
+    dispatch(getProducts({ page: 1, limit: 5 }));
+  }, [dispatch]);
+
+  if (loading) return <p>Loading...</p>;
+  if (error) return <p>Error: {error}</p>;
 
   const handleOpenDialog = (product) => {
     setSelectedProduct(product);
@@ -31,11 +42,17 @@ const Product = () => {
         Browse products...
       </Typography>
       <Grid container spacing={4}>
-        {/* Example Product Cards */}
-        {[...Array(8)].map((_, index) => (
-          <Grid item key={index} xs={12} sm={6} md={3}>
+        {/*Product Cards */}
+        {products.map((product) => (
+          <Grid item key={product._id} xs={12} sm={6} md={3}>
             <Card
-              onClick={() => handleOpenDialog({ title: `Product ${index + 1}`, description: "Product description", price: "$99" })}
+              onClick={() =>
+                handleOpenDialog({
+                  title: product.name,
+                  description: product.description,
+                  price: product.price,
+                })
+              }
               sx={{
                 bgcolor: "grey.800",
                 color: "white",
@@ -47,18 +64,20 @@ const Product = () => {
               }}
             >
               <CardMedia
+                component="img"
                 sx={{ height: 140, bgcolor: "grey.700" }}
-                title="Product image"
+                image={product.image || "/placeholder.png"} // Provide a default image if none is available
+                title={product.name || "Product image"}
               />
               <CardContent>
                 <Typography variant="h6" component="div">
-                  Product title {index + 1}
+                  {product.name || "Product Title"}
                 </Typography>
                 <Typography variant="body2" color="grey.400">
-                  Description
+                  {product.description || "No description available"}
                 </Typography>
                 <Typography variant="h6" sx={{ mt: 1 }}>
-                  Price
+                  R {product.price || "Price not available"}
                 </Typography>
               </CardContent>
             </Card>

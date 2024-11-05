@@ -73,7 +73,7 @@ function Marketplace() {
             <MenuIcon />
           </IconButton>
           <Typography variant="h6" sx={{ flexGrow: 1, fontWeight: 'bold', color: 'green' }}>
-            Mlab <span style={{ color: 'red' }}>marketplace</span>
+            mLab <span style={{ color: 'white' }}>Marketplace</span>
           </Typography>
           <IconButton edge="end" color="inherit" aria-label="search">
             <SearchIcon />
