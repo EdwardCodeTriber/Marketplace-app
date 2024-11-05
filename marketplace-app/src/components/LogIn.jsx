@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { Link } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { loginUser } from '../Redux/authSlice';
 import { Box, Button, TextField, Typography, CircularProgress } from '@mui/material';
@@ -70,6 +71,7 @@ const Login = () => {
               input: { color: 'white' },
             }}
           />
+          <Typography> Dont have an account? <Link to="/register">register</Link></Typography>
           <Button
             type="submit"
             variant="contained"
@@ -82,6 +84,7 @@ const Login = () => {
             }}
             disabled={loading}
           >
+
             {loading ? <CircularProgress size={24} /> : 'Login'}
           </Button>
           {error && (
