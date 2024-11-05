@@ -1,6 +1,6 @@
-# Recipe App API
+# market App API
 
-This is a RESTful API for managing recipes built using Node.js, Express, and MongoDB.
+This is a RESTful API for managing products built using Node.js, Express, and MongoDB.
 
 ## Features
 
@@ -20,21 +20,21 @@ This is a RESTful API for managing recipes built using Node.js, Express, and Mon
 1. Clone the repository:
 
    ```bash
-   git clone https://github.com/your-username/recipe-app-api.git
-   cd recipe-app-api
+   git clone https://github.com/your-username/marketplace-app.git
+   cd marketplace-app/server
 
 ## Authorization (Role-Based Access Control - RBAC)
-- The Recipe App uses Role-Based Access Control (RBAC) for authorization. Users are assigned roles (e.g., admin, user) to control access to specific functionalities.
+- The marketplace App uses Role-Based Access Control (RBAC) for authorization. Users are assigned roles (e.g., admin, user) to control access to specific functionalities.
 
 ## Roles and Permissions
 - Admin:
 
-- Create, edit, and delete recipes.
+- Create, edit, and delete products.
 - Access to all admin-level actions.
 # User:
 
-- View and create recipes.
-- Limited access to edit or delete their own recipes.
+- View and create product.
+- Access product.
 - Role-Based Access Checks
 - On each request, the app checks the user’s role and permissions before allowing specific actions. Permissions are enforced at the endpoint level to ensure only users with sufficient privileges can perform certain operations.
 

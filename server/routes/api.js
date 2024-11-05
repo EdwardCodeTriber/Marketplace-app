@@ -7,7 +7,7 @@ const router = express.Router()
 //Routes
 router.post("/user/register", userController.registerUser)
 router.post("/user/login", userController.loginUser)
-router.post("/product", protect, productController.createProduct)
+router.post("/product",  productController.createProduct)
 router.get("/product", productController.getProducts)
 router.get("/product/:id", protect, productController.getProduct)
 router.delete("/product/:id", protect, productController.deleteProduct)

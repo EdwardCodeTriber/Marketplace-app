@@ -14,17 +14,6 @@ const createProduct = async (req, res) => {
 };
 
 // Create product function
-const cart = async (req, res) => {
-  try {
-    const product = await Products.create(req.body);
-    res.status(201).json(product);
-  } catch (error) {
-    //  error post
-    res
-      .status(500)
-      .json({ error: "An Error has occured when creating a Product" });
-  }
-};
 
 
 
