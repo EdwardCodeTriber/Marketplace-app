@@ -1,17 +1,76 @@
 import Products from "../models/product.js";
+import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
+import { initializeApp } from "firebase/app";
+
+// Firebase Config
+const firebaseConfig = {
+  apiKey: "AIzaSyByKUjeMO7CJFyUxyabcVFAJ8h3EfquYzg",
+  authDomain: "employee-node-6d9ec.firebaseapp.com",
+  projectId: "employee-node-6d9ec",
+  storageBucket: "employee-node-6d9ec.appspot.com",
+  messagingSenderId: "951749396320",
+  appId: "1:951749396320:web:a80e55bd24c39484af8005"
+};
+
+// Initialize Firebase
+const firebaseApp = initializeApp(firebaseConfig);
+const storage = getStorage(firebaseApp);
 
 // Create product function
 const createProduct = async (req, res) => {
   try {
-    const product = await Products.create(req.body);
+    const { name, description, category, price } = req.body;
+    const files = req.files; // Assuming you're using middleware like multer
+
+    // Array to store picture URLs
+    const pictureUrls = [];
+
+    // Upload each picture to Firebase
+    if (files && files.length > 0) {
+      for (const file of files) {
+        // Create a reference to Firebase storage
+        const storageRef = ref(storage, `products/${Date.now()}_${file.originalname}`);
+        
+        // Upload file
+        const snapshot = await uploadBytes(storageRef, file.buffer);
+        
+        // Get download URL
+        const downloadURL = await getDownloadURL(snapshot.ref);
+        
+        // Store URL in pictureUrls array
+        pictureUrls.push(downloadURL);
+      }
+    }
+
+    // Create product with picture URLs
+    const product = await Products.create({
+      name,
+      description,
+      category,
+      price,
+      pictures: pictureUrls
+    });
+
     res.status(201).json(product);
   } catch (error) {
-    //  error post
-    res
-      .status(500)
-      .json({ error: "An Error has occured when creating a Product" });
+    console.error('Product creation error:', error);
+    res.status(500).json({ 
+      error: "An error occurred when creating a Product",
+      details: error.message 
+    });
   }
 };
+// const createProduct = async (req, res) => {
+//   try {
+//     const product = await Products.create(req.body);
+//     res.status(201).json(product);
+//   } catch (error) {
+//     //  error post
+//     res
+//       .status(500)
+//       .json({ error: "An Error has occured when creating a Product" });
+//   }
+// };
 
 // Get category function
 const getProductsByCategory = async (req, res) => {
