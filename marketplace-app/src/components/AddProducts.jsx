@@ -39,7 +39,7 @@ const AddProducts = () => {
       pictures
     };
 
-    await dispatch(createProduct(formData));
+    dispatch(createProduct(formData));
     setLoading(false);
     setSnackbarOpen(true);
 
@@ -48,6 +48,7 @@ const AddProducts = () => {
     setCategory('');
     setPrice('');
     setPictures([]);
+    console.log("Heres your data",formData)
   };
 
   const handleSnackbarClose = () => {
@@ -157,7 +158,7 @@ const AddProducts = () => {
               type="file"
               hidden
               multiple
-              onChange={handleFileChange}
+              onChange= {handleFileChange}
               accept="image/*"
             />
           </Button>

@@ -26,8 +26,20 @@ const createProduct = async (req, res) => {
     const pictureUrls = [];
 
     // Upload each picture to Firebase
-    if (files && files.length > 0) {
-      for (const file of files) {
+    if (!files || files.length === 0) {
+      return res.status(400).json({ 
+        error: "No files were uploaded",
+        details: "At least one image file is required" 
+      });
+    }
+
+    for (const file of files) {
+      // if (!file.buffer) {
+      //   console.error('File buffer is missing:', file);
+      //   continue;
+      // }
+
+      try {
         // Create a reference to Firebase storage
         const storageRef = ref(storage, `products/${Date.now()}_${file.originalname}`);
         
@@ -39,8 +51,20 @@ const createProduct = async (req, res) => {
         
         // Store URL in pictureUrls array
         pictureUrls.push(downloadURL);
+      } catch (uploadError) {
+        console.error('Error uploading file to Firebase:', uploadError);
+        throw new Error(`Failed to upload image: ${uploadError.message}`);
       }
     }
+
+    if (pictureUrls.length === 0) {
+      return res.status(400).json({ 
+        error: "No images were successfully uploaded",
+        details: "Failed to upload any of the provided images" 
+      });
+    }
+
+    console.log('Uploaded picture URLs:', pictureUrls);
 
     // Create product with picture URLs
     const product = await Products.create({
@@ -60,6 +84,50 @@ const createProduct = async (req, res) => {
     });
   }
 };
+// const createProduct = async (req, res) => {
+//   try {
+//     const { name, description, category, price } = req.body;
+//     const files = req.files; // Assuming you're using middleware like multer
+
+//     // Array to store picture URLs
+//     const pictureUrls = [];
+
+//     // Upload each picture to Firebase
+//     if (files && files.length > 0) {
+//       for (const file of files) {
+//         // Create a reference to Firebase storage
+//         const storageRef = ref(storage, `products/${Date.now()}_${file.originalname}`);
+        
+//         // Upload file
+//         const snapshot = await uploadBytes(storageRef, file.buffer);
+        
+//         // Get download URL
+//         const downloadURL = await getDownloadURL(snapshot.ref);
+        
+//         // Store URL in pictureUrls array
+//         pictureUrls.push(downloadURL);
+//       }
+//     }
+//     console.log(pictureUrls)
+
+//     // Create product with picture URLs
+//     const product = await Products.create({
+//       name,
+//       description,
+//       category,
+//       price,
+//       pictures: pictureUrls
+//     });
+
+//     res.status(201).json(product);
+//   } catch (error) {
+//     console.error('Product creation error:', error);
+//     res.status(500).json({ 
+//       error: "An error occurred when creating a Product",
+//       details: error.message 
+//     });
+//   }
+// };
 // const createProduct = async (req, res) => {
 //   try {
 //     const product = await Products.create(req.body);
