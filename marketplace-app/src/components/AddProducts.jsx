@@ -1,5 +1,5 @@
-import { useState } from 'react';
-import { useDispatch } from 'react-redux';
+import { useState } from "react";
+import { useDispatch } from "react-redux";
 import {
   Box,
   TextField,
@@ -7,25 +7,25 @@ import {
   Typography,
   Grid,
   Snackbar,
-  CircularProgress
-} from '@mui/material';
-import { createProduct } from '../Redux/productSlice';
+  CircularProgress,
+} from "@mui/material";
+import { createProduct } from "../Redux/productSlice";
 
 const AddProducts = () => {
-  const [name, setName] = useState('');
-  const [description, setDescription] = useState('');
-  const [category, setCategory] = useState('');
-  const [price, setPrice] = useState('');
+  const [name, setName] = useState("");
+  const [description, setDescription] = useState("");
+  const [category, setCategory] = useState("");
+  const [price, setPrice] = useState("");
   const [pictures, setPictures] = useState([]);
   const [loading, setLoading] = useState(false); // Loader state
   const [snackbarOpen, setSnackbarOpen] = useState(false); // Snackbar state
 
   const dispatch = useDispatch();
 
-  const handleFileChange = (e) => {
-    const files = Array.from(e.target.files);
-    setPictures(files.map((file) => URL.createObjectURL(file))); // Store image previews
-  };
+  // const handleFileChange = (e) => {
+  //   const files = Array.from(e.target.files);
+  //   setPictures(files.map((file) => URL.createObjectURL(file))); // Store image previews
+  // };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -36,19 +36,20 @@ const AddProducts = () => {
       description,
       category,
       price: parseFloat(price),
-      pictures
+      // pictures,
+      images: pictures,
     };
 
     dispatch(createProduct(formData));
     setLoading(false);
     setSnackbarOpen(true);
 
-    setName('');
-    setDescription('');
-    setCategory('');
-    setPrice('');
+    setName("");
+    setDescription("");
+    setCategory("");
+    setPrice("");
     setPictures([]);
-    console.log("Heres your data",formData)
+    console.log("Heres your data", formData);
   };
 
   const handleSnackbarClose = () => {
@@ -58,23 +59,23 @@ const AddProducts = () => {
   return (
     <Box
       sx={{
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-        minHeight: '100vh',
-        bgcolor: 'grey.900',
-        color: 'white',
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+        minHeight: "100vh",
+        bgcolor: "grey.900",
+        color: "white",
       }}
     >
       <Box
         sx={{
-          width: '100%',
+          width: "100%",
           maxWidth: 400,
           p: 4,
-          bgcolor: 'grey.800',
+          bgcolor: "grey.800",
           borderRadius: 2,
           boxShadow: 3,
-          textAlign: 'center',
+          textAlign: "center",
         }}
       >
         <Typography variant="h4" gutterBottom color="lime">
@@ -89,11 +90,11 @@ const AddProducts = () => {
             onChange={(e) => setName(e.target.value)}
             fullWidth
             margin="normal"
-            InputLabelProps={{ style: { color: 'grey.300' } }}
+            InputLabelProps={{ style: { color: "grey.300" } }}
             sx={{
-              bgcolor: 'grey.700',
+              bgcolor: "grey.700",
               borderRadius: 1,
-              input: { color: 'white' },
+              input: { color: "white" },
             }}
           />
           <TextField
@@ -104,11 +105,11 @@ const AddProducts = () => {
             onChange={(e) => setCategory(e.target.value)}
             fullWidth
             margin="normal"
-            InputLabelProps={{ style: { color: 'grey.300' } }}
+            InputLabelProps={{ style: { color: "grey.300" } }}
             sx={{
-              bgcolor: 'grey.700',
+              bgcolor: "grey.700",
               borderRadius: 1,
-              input: { color: 'white' },
+              input: { color: "white" },
             }}
           />
           <TextField
@@ -120,11 +121,11 @@ const AddProducts = () => {
             onChange={(e) => setDescription(e.target.value)}
             fullWidth
             margin="normal"
-            InputLabelProps={{ style: { color: 'grey.300' } }}
+            InputLabelProps={{ style: { color: "grey.300" } }}
             sx={{
-              bgcolor: 'grey.700',
+              bgcolor: "grey.700",
               borderRadius: 1,
-              input: { color: 'white' },
+              input: { color: "white" },
             }}
           />
           <TextField
@@ -135,11 +136,11 @@ const AddProducts = () => {
             onChange={(e) => setPrice(e.target.value)}
             fullWidth
             margin="normal"
-            InputLabelProps={{ style: { color: 'grey.300' } }}
+            InputLabelProps={{ style: { color: "grey.300" } }}
             sx={{
-              bgcolor: 'grey.700',
+              bgcolor: "grey.700",
               borderRadius: 1,
-              input: { color: 'white' },
+              input: { color: "white" },
             }}
           />
           <Button
@@ -148,18 +149,25 @@ const AddProducts = () => {
             fullWidth
             sx={{
               mt: 2,
-              bgcolor: 'lime',
-              color: 'black',
-              '&:hover': { bgcolor: 'limegreen' },
+              bgcolor: "lime",
+              color: "black",
+              "&:hover": { bgcolor: "limegreen" },
             }}
           >
             Upload Images
-            <input
+            {/* <input
               type="file"
               hidden
               multiple
               onChange= {handleFileChange}
               accept="image/*"
+            /> */}
+            <input
+              type="file"
+              multiple
+              hidden
+              accept="image/*"
+              onChange={(e) => setPictures(Array.from(e.target.files))}
             />
           </Button>
           <Grid container justifyContent="center" spacing={1} sx={{ mt: 2 }}>
@@ -169,11 +177,11 @@ const AddProducts = () => {
                 src={picture}
                 alt={`Product Preview ${index}`}
                 style={{
-                  width: '80px',
-                  height: '80px',
-                  objectFit: 'cover',
+                  width: "80px",
+                  height: "80px",
+                  objectFit: "cover",
                   borderRadius: 4,
-                  boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)',
+                  boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)",
                 }}
               />
             ))}
@@ -184,13 +192,13 @@ const AddProducts = () => {
             fullWidth
             sx={{
               mt: 3,
-              bgcolor: 'lime',
-              color: 'black',
-              '&:hover': { bgcolor: 'limegreen' },
+              bgcolor: "lime",
+              color: "black",
+              "&:hover": { bgcolor: "limegreen" },
             }}
             disabled={loading}
           >
-            {loading ? <CircularProgress size={24} /> : 'Add Product'}
+            {loading ? <CircularProgress size={24} /> : "Add Product"}
           </Button>
         </form>
 
@@ -199,7 +207,7 @@ const AddProducts = () => {
           autoHideDuration={3000}
           onClose={handleSnackbarClose}
           message="Product added successfully!"
-          anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
+          anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
         />
       </Box>
     </Box>

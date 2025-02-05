@@ -1,20 +1,93 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
 
-const API_URL = 'http://localhost:5000/api/product'; 
+// const API_URL = 'http://localhost:5000/api/product'; 
+
+// // Create product
+// export const createProduct = createAsyncThunk(
+//   'products/createProduct',
+//   async (productData, { rejectWithValue }) => {
+//     try {
+//       const response = await axios.post(`${API_URL}`, productData);
+//       return response.data;
+//     } catch (error) {
+//       return rejectWithValue(error.response.data);
+//     }
+//   }
+// );
+
+import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
+import { initializeApp } from "firebase/app";
+
+const API_URL = 'http://localhost:5000/api/product';
+
+// Firebase Config
+const firebaseConfig = {
+  apiKey: "AIzaSyByKUjeMO7CJFyUxyabcVFAJ8h3EfquYzg",
+  authDomain: "employee-node-6d9ec.firebaseapp.com",
+  projectId: "employee-node-6d9ec",
+  storageBucket: "employee-node-6d9ec.appspot.com",
+  messagingSenderId: "951749396320",
+  appId: "1:951749396320:web:a80e55bd24c39484af8005"
+};
+
+// Initialize Firebase
+const firebaseApp = initializeApp(firebaseConfig);
+const storage = getStorage(firebaseApp);
 
 // Create product
 export const createProduct = createAsyncThunk(
   'products/createProduct',
   async (productData, { rejectWithValue }) => {
     try {
-      const response = await axios.post(`${API_URL}`, productData);
+      const { images, ...productDetails } = productData;
+      const pictureUrls = [];
+
+      // Check if images exist
+      if (!images || images.length === 0) {
+        throw new Error('No images provided');
+      }
+
+      // Upload each image to Firebase
+      for (const image of images) {
+        try {
+          // Create a reference to Firebase storage
+          const storageRef = ref(storage, `products/${Date.now()}_${image.name}`);
+          
+          // Upload file
+          const snapshot = await uploadBytes(storageRef, image);
+          
+          // Get download URL
+          const downloadURL = await getDownloadURL(snapshot.ref);
+          
+          // Store URL in pictureUrls array
+          pictureUrls.push(downloadURL);
+        } catch (uploadError) {
+          console.error('Error uploading image to Firebase:', uploadError);
+          throw new Error(`Failed to upload image: ${uploadError.message}`);
+        }
+      }
+
+      // Combine product details with image URLs
+      const completeProductData = {
+        ...productDetails,
+        pictures: pictureUrls
+      };
+
+      // Make API call with complete product data
+      const response = await axios.post(API_URL, completeProductData);
       return response.data;
     } catch (error) {
-      return rejectWithValue(error.response.data);
+      return rejectWithValue(
+        error.response?.data || { 
+          error: error.message,
+          details: 'Failed to create product'
+        }
+      );
     }
   }
 );
+
 
 // Get all products with pagination
 export const getProducts = createAsyncThunk(
