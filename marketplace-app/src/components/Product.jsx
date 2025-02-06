@@ -9,21 +9,24 @@ import Dialog from "@mui/material/Dialog";
 import DialogTitle from "@mui/material/DialogTitle";
 import DialogContent from "@mui/material/DialogContent";
 import DialogActions from "@mui/material/DialogActions";
-import {Box, CircularProgress} from "@mui/material/";
+import { Box, CircularProgress } from "@mui/material/";
 import Button from "@mui/material/Button";
 import { useDispatch, useSelector } from "react-redux";
 import { getProducts } from "../Redux/productSlice";
 
 const Product = () => {
+  // States
   const [open, setOpen] = useState(false);
   const [selectedProduct, setSelectedProduct] = useState(null);
   const dispatch = useDispatch();
   const { products, loading, error } = useSelector((state) => state.products);
 
+  // Hooks
   useEffect(() => {
     dispatch(getProducts({ page: 1, limit: 5 }));
   }, [dispatch]);
 
+  // Functions
   const handleOpenDialog = (product) => {
     setSelectedProduct(product);
     setOpen(true);
@@ -39,7 +42,7 @@ const Product = () => {
       <Typography variant="h4" align="center" gutterBottom>
         Browse products...
       </Typography>
-      
+
       {loading ? (
         <Box sx={{ display: "flex", justifyContent: "center", py: 3 }}>
           <CircularProgress color="primary" />
@@ -55,7 +58,7 @@ const Product = () => {
               <Card
                 onClick={() =>
                   handleOpenDialog({
-                    image: product.pictures,
+                    pictures: product.pictures,
                     title: product.name,
                     description: product.description,
                     price: product.price,
@@ -95,22 +98,23 @@ const Product = () => {
       )}
 
       {/* Dialog for Product Details */}
-      <Dialog open={open} onClose={handleCloseDialog} maxWidth="md">
+      <Dialog open={open} onClose={handleCloseDialog} maxWidth="md" sx={{background: 'adc178', color:"black"}}>
         <DialogTitle>{selectedProduct?.title}</DialogTitle>
         <DialogContent dividers>
-          <Box display="flex" flexDirection={{ xs: "column", md: "row" }} alignItems="center">
-            <Box
-              component="img"
-              src={selectedProduct?.pictures || "/placeholder.png"}
-              alt={selectedProduct?.title}
-              sx={{
-                width: { xs: "100%", md: "300px" },
-                height: "auto",
-                borderRadius: 2,
-                marginRight: { md: 3 },
-                marginBottom: { xs: 2, md: 0 },
-              }}
-            />
+          <Box sx={{ display: "flex", gap: 2, flexWrap: "wrap" }}>
+            {selectedProduct?.pictures?.map((pic, index) => (
+              <Box
+                key={index}
+                component="img"
+                src={pic || "/placeholder.png"}
+                alt={`${selectedProduct?.title} - ${index + 1}`}
+                sx={{
+                  width: { xs: "100%", md: "300px" },
+                  height: "auto",
+                  borderRadius: 2,
+                }}
+              />
+            ))}
             <Box>
               <Typography variant="body1" color="text.secondary" sx={{ mb: 2 }}>
                 {selectedProduct?.description}
@@ -122,8 +126,12 @@ const Product = () => {
           </Box>
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleCloseDialog} color="secondary">Close</Button>
-          <Button variant="contained" color="primary">Add to Cart</Button>
+          <Button onClick={handleCloseDialog} color="secondary">
+            Close
+          </Button>
+          <Button variant="contained" color="primary">
+            Add to Cart
+          </Button>
         </DialogActions>
       </Dialog>
     </Container>

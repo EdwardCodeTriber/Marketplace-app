@@ -96,7 +96,10 @@ function Marketplace() {
       <Product />
 
       {/* Footer */}
-      <Footer />
+      <div>
+        <Footer />
+      </div>
+      
     </Box>
   );
 }
