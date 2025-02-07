@@ -98,7 +98,18 @@ const Product = () => {
       )}
 
       {/* Dialog for Product Details */}
-      <Dialog open={open} onClose={handleCloseDialog} maxWidth="md" sx={{background: 'adc178', color:"black"}}>
+      <Dialog
+        open={open}
+        onClose={handleCloseDialog}
+        maxWidth="md"
+        sx={{
+          "& .MuiDialog-paper": {
+            // This targets the paper component of the Dialog
+            backgroundColor: "#333333", // Dark grey background
+            color: "white", // Changed text color to white for better contrast
+          },
+        }}
+      >
         <DialogTitle>{selectedProduct?.title}</DialogTitle>
         <DialogContent dividers>
           <Box sx={{ display: "flex", gap: 2, flexWrap: "wrap" }}>
@@ -116,10 +127,10 @@ const Product = () => {
               />
             ))}
             <Box>
-              <Typography variant="body1" color="text.secondary" sx={{ mb: 2 }}>
-                {selectedProduct?.description}
+              <Typography variant="body1" color="text.secondary" sx={{ mb: 2, color: "white" }}>
+                Description: {selectedProduct?.description}
               </Typography>
-              <Typography variant="h6" color="primary">
+              <Typography variant="h6" color="primary" sx={{color:"white"}}>
                 Price: R {selectedProduct?.price}
               </Typography>
             </Box>
